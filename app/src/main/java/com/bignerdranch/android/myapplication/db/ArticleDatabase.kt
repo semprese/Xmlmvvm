@@ -7,7 +7,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.bignerdranch.android.myapplication.models.Article
 
-
 @Database(
     entities = [Article::class],
     version = 1
@@ -15,23 +14,23 @@ import com.bignerdranch.android.myapplication.models.Article
 @TypeConverters(Converters::class)
 abstract class ArticleDatabase : RoomDatabase() {
 
-    abstract fun articleDao(): ArticleDAO
+    abstract fun getArticleDao(): ArticleDao
 
-    companion object{
+    companion object {
         @Volatile
-        private var INSTANCE: ArticleDatabase? = null
+        private var instance: ArticleDatabase? = null
         private val LOCK = Any()
 
         operator fun invoke(context: Context) =
-            INSTANCE?: synchronized(LOCK){
-                INSTANCE?: createDatabase(context).also{ INSTANCE = it}
+            instance ?: synchronized(LOCK) {
+                instance ?: createDatabase(context).also { instance = it }
             }
+
         private fun createDatabase(context: Context) =
             Room.databaseBuilder(
-                context,
+                context.applicationContext,
                 ArticleDatabase::class.java,
                 "article_db.db"
             ).build()
     }
-
 }

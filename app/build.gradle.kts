@@ -1,7 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("kotlin-kapt")
+//    id("kotlin-kapt")
+//    kotlin("kapt")
+//    version "2.1.0"
+    id ("com.google.devtools.ksp")
+    id ("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -28,11 +32,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
     buildFeatures {
         viewBinding = true
@@ -49,6 +53,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+
+
+    implementation (libs.androidx.navigation.dynamic.features.fragment)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -58,8 +65,12 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.6.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.5.0")
     // Room
-    implementation ("androidx.room:room-runtime:2.2.5")
-//    kapt ("androidx.room:room-compiler:2.2.5")
+
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp("androidx.room:room-compiler:2.5.0")
+
+//    annotationProcessor ("android.arch.persistence.room:compiler:1.0.0")
 
     // Glide
     implementation ("com.github.bumptech.glide:glide:4.11.0")

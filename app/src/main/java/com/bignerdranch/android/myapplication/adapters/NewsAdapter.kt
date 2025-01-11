@@ -1,4 +1,4 @@
-package com.bignerdranch.android.myapplication.ui.adapters
+package com.bignerdranch.android.myapplication.adapters
 
 import android.view.LayoutInflater
 import android.view.View
