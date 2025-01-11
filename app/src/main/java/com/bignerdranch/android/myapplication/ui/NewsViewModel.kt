@@ -3,6 +3,7 @@ package com.bignerdranch.android.myapplication.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bignerdranch.android.myapplication.models.Article
 import com.bignerdranch.android.myapplication.models.NewsResponse
 import com.bignerdranch.android.myapplication.repository.NewsRepository
 import com.bignerdranch.android.myapplication.util.Resource
@@ -28,11 +29,12 @@ class NewsViewModel(
         breakingNews.postValue(handleBreakingNewsResponse(response))
     }
 
-    fun searchNews(searchQuery:String) = viewModelScope.launch {
+    fun searchNews(searchQuery: String) = viewModelScope.launch {
         searchNews.postValue(Resource.Loading())
-        val response = newsRepository.searchNews(searchQuery,searchNewsPage)
+        val response = newsRepository.searchNews(searchQuery, searchNewsPage)
         searchNews.postValue(handleSearchNewsResponse(response))
     }
+
     private fun handleBreakingNewsResponse(response: Response<NewsResponse>) : Resource<NewsResponse> {
         if(response.isSuccessful) {
             response.body()?.let { resultResponse ->
@@ -41,6 +43,7 @@ class NewsViewModel(
         }
         return Resource.Error(response.message())
     }
+
     private fun handleSearchNewsResponse(response: Response<NewsResponse>) : Resource<NewsResponse> {
         if(response.isSuccessful) {
             response.body()?.let { resultResponse ->
@@ -50,6 +53,13 @@ class NewsViewModel(
         return Resource.Error(response.message())
     }
 
+    fun saveArticle(article: Article) = viewModelScope.launch {
+        newsRepository.upsert(article)
+    }
 
+    fun getSavedNews() = newsRepository.getSavedNews()
 
+    fun deleteArticle(article: Article) = viewModelScope.launch {
+        newsRepository.deleteArticle(article)
+    }
 }

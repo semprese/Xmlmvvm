@@ -5,14 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bignerdranch.android.myapplication.MainActivity
+import com.bignerdranch.android.myapplication.ui.MainActivity
 import com.bignerdranch.android.myapplication.R
 import com.bignerdranch.android.myapplication.adapters.NewsAdapter
 import com.bignerdranch.android.myapplication.databinding.FragmentSearchBinding
@@ -40,13 +38,18 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        searchViewModel = (activity as MainActivity).viewModel
-        //
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
-
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        return root
+    }
+
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        searchViewModel = (activity as MainActivity).viewModel
+        setupRecyclerView()
 
         newsAdapter.setOnClickListener {
             val bundle = Bundle().apply {
@@ -79,9 +82,20 @@ class SearchFragment : Fragment() {
 
             }
         })
-        return root
-    }
 
+        var job: Job? = null
+        binding.etSearch.addTextChangedListener { editable ->
+            job?.cancel()
+            job = MainScope().launch {
+                delay(SEARCH_NEWS_TIME_DELAY)
+                editable?.let {
+                    if(editable.toString().isNotEmpty()){
+                        searchViewModel.searchNews(editable.toString())
+                    }
+                }
+            }
+        }
+    }
     private fun hideProgressBar() {
         binding.paginationProgressBar.visibility = View.INVISIBLE
     }
@@ -95,24 +109,6 @@ class SearchFragment : Fragment() {
         binding.rvSearchNews.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
-
-        var job: Job? = null
-        binding.etSearch.addTextChangedListener { editable ->
-            job?.cancel()
-            job = MainScope().launch {
-                delay(SEARCH_NEWS_TIME_DELAY)
-                editable?.let {
-                    if(editable.toString().isNotEmpty()){
-                        searchViewModel.searchNews(editable.toString())
-                    }
-                }
-            }
         }
     }
     override fun onDestroyView() {
