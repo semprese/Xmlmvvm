@@ -34,6 +34,7 @@ class NewsViewModel(
     val searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var searchNewsPage = 1
     var searchNewsResponse: NewsResponse? = null
+    //ooo
 
     init {
         getBreakingNews("us")
