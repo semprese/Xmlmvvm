@@ -2,6 +2,7 @@ package com.bignerdranch.android.myapplication.ui
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +20,9 @@ import javax.inject.Named
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    lateinit var viewModel: NewsViewModel
+
+    //    lateinit var viewModel: NewsViewModel
+    val viewModel: NewsViewModel by viewModels()
 
     @Inject
     @Named("String2")
@@ -27,11 +30,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-Log.d("MainActivity", "Test string is $testString")
+        Log.d("MainActivity", "Test string is $testString")
+        viewModel
         val repository = NewsRepository(ArticleDatabase(this))
-
-        val viewModelProviderFactory = NewsViewModelProviderFactory(application, newsRepository = repository)
-        viewModel = ViewModelProvider(this, viewModelProviderFactory).get(NewsViewModel::class.java)
+//        val viewModelProviderFactory = NewsViewModelProviderFactory(application, newsRepository = repository)
+//        viewModel = ViewModelProvider(this, viewModelProviderFactory).get(NewsViewModel::class.java)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

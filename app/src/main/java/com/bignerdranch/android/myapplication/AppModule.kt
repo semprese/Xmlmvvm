@@ -1,9 +1,14 @@
 package com.bignerdranch.android.myapplication
 
+import android.content.Context
+import com.bignerdranch.android.myapplication.db.ArticleDatabase
+import com.bignerdranch.android.myapplication.repository.NewsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -22,4 +27,9 @@ object AppModule {
     @Singleton
     @Provides//с помощью этой функции мы предост зависимость
     fun provideTestString2() = "This is a string2 we will inject as well"
+
+    @Singleton
+    @Provides
+    fun repo(@ApplicationContext context: Context): NewsRepository =
+        NewsRepository(ArticleDatabase(context))
 }

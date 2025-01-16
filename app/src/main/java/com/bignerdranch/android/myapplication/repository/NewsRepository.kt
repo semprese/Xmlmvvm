@@ -3,8 +3,9 @@ package com.bignerdranch.android.myapplication.repository
 import com.bignerdranch.android.myapplication.api.RetrofitInstance
 import com.bignerdranch.android.myapplication.db.ArticleDatabase
 import com.bignerdranch.android.myapplication.models.Article
+import javax.inject.Inject
 
-class NewsRepository(
+class NewsRepository @Inject constructor(
     val db: ArticleDatabase
 ) {
     suspend fun getBreakingNews(countryCode: String, pageNumber: Int) =
