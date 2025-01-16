@@ -6,4 +6,6 @@
     <string name="favourites">Favourites</string>
     <string name="search">Search</string>
     <string name="title_activity_main2">MainActivity2</string>
+
+    <string name="string_to_inject">This is a string we will inject</string>
 </resources>
