@@ -6,6 +6,8 @@ plugins {
 //    version "2.1.0"
     id ("com.google.devtools.ksp")
     id ("androidx.navigation.safeargs.kotlin")
+    id("com.google.dagger.hilt.android")
+
 }
 
 android {
@@ -71,7 +73,8 @@ dependencies {
     ksp("androidx.room:room-compiler:2.5.0")
 
 //    annotationProcessor ("android.arch.persistence.room:compiler:1.0.0")
-
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    ksp("com.google.dagger:hilt-compiler:2.51.1")
     // Glide
     implementation ("com.github.bumptech.glide:glide:4.11.0")
 //    kapt ("com.github.bumptech.glide:compiler:4.11.0")

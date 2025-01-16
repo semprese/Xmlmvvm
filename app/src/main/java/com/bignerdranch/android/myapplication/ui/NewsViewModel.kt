@@ -10,6 +10,7 @@ import android.net.NetworkCapabilities.TRANSPORT_CELLULAR
 import android.net.NetworkCapabilities.TRANSPORT_ETHERNET
 import android.net.NetworkCapabilities.TRANSPORT_WIFI
 import android.os.Build
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,14 +20,23 @@ import com.bignerdranch.android.myapplication.models.Article
 import com.bignerdranch.android.myapplication.models.NewsResponse
 import com.bignerdranch.android.myapplication.repository.NewsRepository
 import com.bignerdranch.android.myapplication.util.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.Response
+import javax.inject.Inject
+import javax.inject.Named
 
-class NewsViewModel(
-    app: Application,
-    private val newsRepository: NewsRepository
-) : AndroidViewModel(app) {
+@HiltViewModel
+class NewsViewModel @Inject constructor(
+//    app: Application,
+    val newsRepository: NewsRepository,
+     testString2: String,
+    @ApplicationContext val context: Context
+) : ViewModel(){
+//    AndroidViewModel(app) {
+
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var breakingNewsPage = 1
     var breakingNewsResponse: NewsResponse? = null
@@ -37,6 +47,7 @@ class NewsViewModel(
     //ooo
 
     init {
+        Log.d("ViewModel", "TestString from ViewModel $testString2" )
         getBreakingNews("us")
     }
 
@@ -130,7 +141,7 @@ class NewsViewModel(
         }
     }
     private fun hasInternetConnection(): Boolean {
-        val connectivityManager = getApplication<NewsApplication>().getSystemService(
+        val connectivityManager = context.getSystemService(
             Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
